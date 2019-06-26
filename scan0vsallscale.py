@@ -40,14 +40,11 @@ for i in range(1, len(filenames) - 1):
         maxZ = tmpMaxZ
 
 maxOfMax = max(maxPad)
-for i in range(0, len(values)) :
-    ratio = maxOfMax / maxPad[i]
-    #for j in range(0, len(values[i])) :
-    #    values[i][j] = values[i][j] * ratio
-    leg=os.path.splitext(os.path.basename(filenames[i + 1]))[0]
+ax.plot(values[0], zcs[0], label= "scan 0")
+ax.plot(values[1], zcs[1], label= "scan all")
+ax.plot(values[2], zcs[2], label= "scan 1234")
+ax.plot(values[3], zcs[3], label= "Larchitect")
 
-    ax.plot(values[i], zcs[i], label= leg.replace("-"," "))
-    #weibull
 
 #filename2 = sys.argv[2]
 #filename3 = sys.argv[2]

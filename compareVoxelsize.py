@@ -44,9 +44,10 @@ for i in range(0, len(values)) :
     ratio = maxOfMax / maxPad[i]
     #for j in range(0, len(values[i])) :
     #    values[i][j] = values[i][j] * ratio
-    leg=os.path.splitext(os.path.basename(filenames[i + 1]))[0]
-
-    ax.plot(values[i], zcs[i], label= leg.replace("-"," "))
+    if i < len(values) - 1:
+        ax.plot(values[i], zcs[i], label= os.path.splitext(os.path.dirname(filenames[i + 1]))[0])
+    else:
+        ax.plot(values[i], zcs[i], label="Larchitect 10cm")
     #weibull
 
 #filename2 = sys.argv[2]

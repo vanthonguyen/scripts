@@ -10,8 +10,7 @@ plt.style.use('seaborn-whitegrid')
 
 
 matplotlib.rcParams.update({'font.size': 14})
-#matplotlib.rcParams.update({'text.latex.unicode': True})
-#rc('font',**{'family':'sans-serif','sans-serif':['Source Sans Pro']})
+#matplotlib.rcParams.update({'text.latex.unicode': True}) #rc('font',**{'family':'sans-serif','sans-serif':['Source Sans Pro']})
 
 matplotlib.rcParams['font.family'] = 'sans-serif'
 
@@ -25,7 +24,7 @@ maxPad = []
 minZ = sys.float_info.max
 maxZ = -sys.float_info.max;
 # 0 is the script name
-for i in range(1, len(filenames) - 1):
+for i in range(1, len(filenames)):
     #read value
     zc, value = np.loadtxt(filenames[i], dtype='float, float', delimiter='\t', usecols=(4, 5), unpack=True, skiprows=11)
     zcs.append(zc)
@@ -40,21 +39,14 @@ for i in range(1, len(filenames) - 1):
         maxZ = tmpMaxZ
 
 maxOfMax = max(maxPad)
-for i in range(0, len(values)) :
-    ratio = maxOfMax / maxPad[i]
-    #for j in range(0, len(values[i])) :
-    #    values[i][j] = values[i][j] * ratio
-    leg=os.path.splitext(os.path.basename(filenames[i + 1]))[0]
 
-    ax.plot(values[i], zcs[i], label= leg.replace("-"," "))
-    #weibull
+ax.plot(values[0], zcs[0], label= "PAD MLE bias corrected")
+ax.plot(values[1], zcs[1], label= "PAD BeerLambert unequal path")
+ax.plot(values[2], zcs[2], label= "Larchitect")
 
-#filename2 = sys.argv[2]
-#filename3 = sys.argv[2]
-
-title = filenames[len(filenames) - 1]
+title = "MLE vs BeerLambert"
 xlabel = "PAD"
-ylabel = "z (m)"
+ylabel = "Height (m)"
 ax.legend()
 ax.set_ylim(minZ, maxZ)
 minor_ticks = np.arange(int(minZ), maxZ)

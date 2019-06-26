@@ -54,28 +54,39 @@ areaByZ = np.zeros((nbSpot,dim[2]))
 #volumeByZ = np.zeros((nbSpot,dim[2]))
 
 #total = dim[0]*dim[1]*dim[3]
-nbVoxSpot=np.zeros(nbSpot)
+nbVoxSpot = np.zeros(nbSpot)
+
+spotFiles = np.empty(nbSpot, dtype=str)
+
+spotFiles = [(outPrefix + "spot" + str(spot + 1) + ".grid") for spot in range(0, nbSpot)]
+fds = [open(path, 'w') for path in spotFiles]
+    
+    
 
 for x in range(0, dim[0]):
     for y in range(0, dim[1]):
         for z in range(0, dim[2]): 
             coordX = bbox[0] + float(x)*size[0]
             coordY = bbox[1] + float(y)*size[1]
-            dat = [float(a) for a in infile.readline().split()] 
+            lineString = infile.readline()
+            dat = [float(a) for a in lineString.split()] 
             for spot in range(0, nbSpot):
                 if isInSpot(coordX, centerX[spot], coordY, centerY[spot], radii, size[0], size[1]) :
                     nbVoxSpot[spot] += 1
-                    if dat[0] != -1:
-                        for m in range(0, len(dat), 3):
-                            areaByZ[spot][z] = areaByZ[spot][z] + dat[m + 1]
+
+                    fds[spot].write(lineString)
+                    #if dat[0] != -1:
+                        #for m in range(0, len(dat), 3):
+                            #areaByZ[spot][z] = areaByZ[spot][z] + dat[m + 1]
                             #volumeByZ[spot][z] = volumeByZ[spot][z] + dat[m + 2]
                             #print "x,y,z", x, y, z, len(dat), dat[m+1]
                             #print dat[m + 1]
                         #print areaByZ[z], volumeByZ[z]
 
 infile.close()
+for fd in fds:
+    fd.close()
+#print (nbVoxSpot)
 
-print (nbVoxSpot)
-
-for spot in range(0, nbSpot):
-    exportToFile(outPrefix + "spot" + str(spot + 1) + ".hist", areaByZ[spot], bbox[2], size[2], nbVoxSpot[spot]/dim[2]*size[0]*size[1]*size[2])
+#for spot in range(0, nbSpot):
+#    exportToFile(outPrefix + "spot" + str(spot + 1) + ".hist", areaByZ[spot], bbox[2], size[2], nbVoxSpot[spot]/dim[2]*size[0]*size[1]*size[2])
