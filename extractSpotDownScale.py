@@ -46,6 +46,8 @@ of.write("datatype\tfloat\n")
 
 of.flush()
 PADs = np.zeros((ncols,nrows,nzlev))
+#LADs = np.zeros((ncols,nrows,nzlev))
+#WADs = np.zeros((ncols,nrows,nzlev))
 voxelVolume = size[0]*size[1]*size[2]*FACTOR*FACTOR*FACTOR
 
 for x in range(0, dim[0]):

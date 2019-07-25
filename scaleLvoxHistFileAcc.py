@@ -5,7 +5,7 @@ import numpy as np
 
 histFile = sys.argv[1]
 
-downscaleFactor = int(sys.argv[2])
+downscaleFactor = float(sys.argv[2])
 
 downscaleFile = sys.argv[3] 
 

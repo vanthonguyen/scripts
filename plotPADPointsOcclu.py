@@ -122,7 +122,7 @@ for i in range(0, len(values)) :
         #p1, = par1.plot(values[i], zcs[i], label= os.path.splitext(os.path.basename(filenames[i + 1]))[0])
         p1, = par1.plot(values[i], zcs[i], label= "Nb of returns", linewidth=0.8, color=palettes["Point"])
     else :
-        p2, = par2.plot(values[i]*100, zcs[i], label= "Occlusion)", linewidth=0.8, color=palettes["Occlusion"])
+        p2, = par2.plot(values[i]*100, zcs[i], label= "Occlusion", linewidth=0.8, color=palettes["Occlusion"])
  
 #par1.set_ylim(0, 4)
 #par2.set_ylim(1, 65)

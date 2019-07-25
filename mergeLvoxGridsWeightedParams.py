@@ -4,30 +4,29 @@ import math
 import numpy as np
 from utils import readLvoxGridHeaderTuple
 
-prefix = "beer"
+#prefix = "beer"
+#
+#if len(sys.argv) > 1:
+#    prefix = sys.argv[1]
+#
 
-if len(sys.argv) > 1:
-    prefix = sys.argv[1]
+v0pad = sys.argv[1]
+v1pad = sys.argv[2]
+v2pad = sys.argv[3]
+v3pad = sys.argv[4]
+v4pad = sys.argv[5]
 
+v0nt = sys.argv[6]
+v1nt = sys.argv[7]
+v2nt = sys.argv[8]
+v3nt = sys.argv[9]
+v4nt = sys.argv[10]
 
-#hardcode ok?
-v0pad = "v0-" + prefix + ".GRD3DLVOX"
-v1pad = "v1-" + prefix + ".GRD3DLVOX"
-v2pad = "v2-" + prefix + ".GRD3DLVOX"
-v3pad = "v3-" + prefix + ".GRD3DLVOX"
-v4pad = "v4-" + prefix + ".GRD3DLVOX"
-
-v0nt = "v0-nt.GRD3DLVOX"
-v1nt = "v1-nt.GRD3DLVOX"
-v2nt = "v2-nt.GRD3DLVOX"
-v3nt = "v3-nt.GRD3DLVOX"
-v4nt = "v4-nt.GRD3DLVOX"
-
-v0nb = "v0-nb.GRD3DLVOX"
-v1nb = "v1-nb.GRD3DLVOX"
-v2nb = "v2-nb.GRD3DLVOX"
-v3nb = "v3-nb.GRD3DLVOX"
-v4nb = "v4-nb.GRD3DLVOX"
+v0nb = sys.argv[11]
+v1nb = sys.argv[12]
+v2nb = sys.argv[13]
+v3nb = sys.argv[14]
+v4nb = sys.argv[15]
 
 N_THRESHOLD = 5
 

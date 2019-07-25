@@ -33,16 +33,19 @@ values = []
 maxPad = []
 minZ = sys.float_info.max
 maxZ = -sys.float_info.max;
-print (filenames)
+#print (filenames)
+nbVox40cm = int(filenames[6])
 nbvox = []
 nbvox.append(0) #dummy
-nbvox.append(int(filenames[5]))
-nbvox.append(int(filenames[6]))
-nbvox.append(int(filenames[7]))
-nbvox.append(int(filenames[8]))
+nbvox.append(nbVox40cm*8*8) #5cm
+nbvox.append(nbVox40cm*4*4) #10cm
+nbvox.append(nbVox40cm*2*2) #20cm
+nbvox.append(nbVox40cm) #40cm
+nbvox.append(nbVox40cm*8*8) #L-Architect 5cm
 
 # 0 is the script name
-for i in range(1, 5):
+for i in range(1, 6):
+    print (filenames[i])
     #read value
     zc, value = np.loadtxt(filenames[i], dtype='float, float', delimiter='\t', usecols=(4, 5), unpack=True, skiprows=11)
     zcs.append(zc)
@@ -63,16 +66,15 @@ ax = plt.axes()
 ax.set_xlabel("PAD ($m^2.m^{-3}$)")
 ax.set_ylabel("Height (m)")
 
-for i in range (0, len(zcs)):
-    zcs[i] -= minZ
-
 for i in range(0, len(values)) :
     if i == 0:
+        ax.plot(values[i], zcs[i], label= "voxel 5 cm", linewidth=0.8, marker='.', markevery=10, color=palettes["PAD"]) 
+    elif i == 1:
         ax.plot(values[i], zcs[i], label= "voxel 10 cm", linewidth=0.8, color=palettes["PAD"]) 
-    elif i == 1 :
+    elif i == 2 :
         #ax.plot(values[i], zcs[i], '.-', label= "voxel 10cm + 40cm") 
         ax.plot(values[i], zcs[i], label= "voxel 20 cm", linestyle='--', linewidth=0.8, color=palettes["PAD"]) 
-    elif i == 2 :
+    elif i == 3 :
         #ax.plot(values[i], zcs[i], '.-', label= "voxel 10cm + 40cm") 
         ax.plot(values[i], zcs[i], label= "voxel 40 cm", linestyle='--', marker='+', linewidth=0.8, color=palettes["PAD"]) 
     else :

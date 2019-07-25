@@ -1,0 +1,184 @@
+import sys
+import os
+import math
+import numpy as np
+
+#hardcode ok?
+v0pad = v0-beer.GRD3DLVOX
+v1pad = v1-beer.GRD3DLVOX
+v2pad = v2-beer.GRD3DLVOX
+v3pad = v3-beer.GRD3DLVOX
+v4pad = v4-beer.GRD3DLVOX
+
+v0nt = v0-nt.GRD3DLVOX
+v1nt = v1-nt.GRD3DLVOX
+v2nt = v2-nt.GRD3DLVOX
+v3nt = v3-nt.GRD3DLVOX
+v4nt = v4-nt.GRD3DLVOX
+
+v0nb = v0-nb.GRD3DLVOX
+v1nb = v1-nb.GRD3DLVOX
+v2nb = v2-nb.GRD3DLVOX
+v3nb = v3-nb.GRD3DLVOX
+v4nb = v4-nb.GRD3DLVOX
+
+N_THRESHOLD = 5
+isFirst = True
+#read header of one
+nx, ny, nz, xmin, ymin, zmin, xsize, ysize, zsize, noda, dt = readLvoxGridHeaderTuple(v0pad)
+
+sumPADs = np.zeros((ncols,nrows,nzlev))
+sumWeight = np.zeros((ncols,nrows,nzlev))
+def isNotOcclu(pad, nt, nb) :
+    return nt - nb > N_THRESHOLD and pad >= 0
+
+def merge(padfile, ntfile, nbfile):
+    inpad1 = open(padfile1, 'r')
+    inpad2 = open(padfile2, 'r')
+
+    ntfile1 = open(ntfile1, 'r')
+    ntfile2 = open(ntfile2, 'r')
+
+    nbfile1 = open(nbfile1, 'r')
+    nbfile2 = open(nbfile2, 'r')
+    global sumPADs
+    global sumWeight
+    
+    global isFirst
+
+    for i in range(0, 11):
+        inpad1.readline()
+        inpad2.readline()
+
+        ntfile1.readline()
+        ntfile2.readline()
+
+        nbfile1.readline()
+        nbfile2.readline()
+
+    ix = 0
+    iy = 0
+    iz = 0
+    while True:
+        linepad1 = padfile1.readline()
+        linepad2 = padfile2.readline()
+
+        linent1 = linent1.readline()
+        linent2 = linent2.readline()
+
+        linenb1 = linenb1.readline()
+        linenb2 = linenb2.readline()
+
+    if not linepad1 or not linepad1 or not linent1 or not linent2 or not linenb1 or not linenb2: break  # EOF
+
+    if linepad1.strip():
+        #sum value
+        ix = 0
+        pad1s = [float(x) for x in linepad1.split()] 
+        pad2s = [float(x) for x in linepad2.split()] 
+        
+        nt1s = [int(x) for x in linent1.split()] 
+        nt2s = [int(x) for x in linent2.split()] 
+
+        nb1s = [int(x) for x in linenb1.split()] 
+        nb2s = [int(x) for x in linenb2.split()] 
+
+        for ind in range(0, len(ns)):
+            pad1 = pad1s[ind]
+            pad2 = pad2s[ind]
+            
+            nt1 = nt1s[ind]
+            nt2 = nt2s[ind]
+
+            nb1 = nb1s[ind]
+            nb2 = nb2s[ind]
+
+            if isFirst and isNotOcclu(pad1, nt1, nb1) :
+                w = nt1 - nb1
+                sumPADs[ix,iy,iz] += w*pad1
+                sumWeight[ix,iy,iz] += w
+            #if ix < nbx and iy > skipy - 1 and iy < nby + skipy and iz < nbz:
+            #if ix < nbx and iy > oldNby - nby - 1 and iz < nbz:
+            if ix < nbx and iy > oldNby - nby - skipy - 1 and iy < oldNby - skipy and iz < nbz:
+                outfile.write(str(pad))
+                if ix < nbx - 1:
+                    outfile.write("\t")
+                elif ix == nbx - 1 :
+                    outfile.write("\n")
+            ix +=1
+        iy += 1
+    else:
+        if iz < nbz:
+            outfile.write(line) 
+        iz += 1
+        iy = 0
+
+
+
+    if not line1.strip():
+        outfile.write(line1) 
+    else:
+        ns1 = [float(x) for x in line1.split()] 
+        ns2 = [float(x) for x in line2.split()] 
+        if len(ns1) != len(ns2):
+            print ("error the number of elements in two grids is not the same!!!")
+            break
+        for ind in range(0, len(ns1)):
+            if ns1[ind] < -7.99 or ns2[ind] < -7.99:
+                outfile.write("-8")
+            else :
+                maxPad=max(ns1[ind], ns2[ind])
+                if maxPad.is_integer():
+                    maxPad = int(maxPad)
+                outfile.write(str(maxPad))
+            if ind < len(ns1) - 1:
+                outfile.write("\t")
+            else:
+                outfile.write("\n")
+
+infile.close()
+infile2.close()
+
+    
+gridfile = sys.argv[1]
+gridfile2 = sys.argv[2]
+outgrid = sys.argv[3]
+
+infile = open(gridfile, 'r')
+infile2 = open(gridfile2, 'r')
+outfile = open(outgrid, 'w')
+
+for i in range(0, 11):
+    outfile.write(infile.readline())
+    infile2.readline()
+
+count = 0
+while True:
+    line1 = infile.readline()
+    line2 = infile2.readline()
+    if not line1 or not line2: break  # EOF
+
+    if not line1.strip():
+        outfile.write(line1) 
+    else:
+        ns1 = [float(x) for x in line1.split()] 
+        ns2 = [float(x) for x in line2.split()] 
+        if len(ns1) != len(ns2):
+            print ("error the number of elements in two grids is not the same!!!")
+            break
+        for ind in range(0, len(ns1)):
+            if ns1[ind] < -7.99 or ns2[ind] < -7.99:
+                outfile.write("-8")
+            else :
+                maxPad=max(ns1[ind], ns2[ind])
+                if maxPad.is_integer():
+                    maxPad = int(maxPad)
+                outfile.write(str(maxPad))
+            if ind < len(ns1) - 1:
+                outfile.write("\t")
+            else:
+                outfile.write("\n")
+
+infile.close()
+infile2.close()
+outfile.close()
